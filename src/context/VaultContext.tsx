@@ -7,6 +7,8 @@ interface VaultContextType {
   withdrawalRequests: WithdrawalRequest[];
   transactions: Transaction[];
   currentUser: string;
+  availableAccounts: { address: string; name: string }[];
+  setCurrentUser: (address: string) => void;
   createVault: (vault: Omit<Vault, 'id' | 'createdAt'>) => void;
   deposit: (vaultId: string, amount: number) => void;
   requestWithdrawal: (vaultId: string, amount: number, purpose: string) => void;
@@ -47,11 +49,17 @@ const mockVaults: Vault[] = [
   },
 ];
 
+const availableAccounts = [
+  { address: '0x1234...5678', name: 'Account 1' },
+  { address: '0x9876...5432', name: 'Account 2' },
+  { address: '0xabcd...efgh', name: 'Account 3' },
+];
+
 export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [vaults, setVaults] = useState<Vault[]>(mockVaults);
   const [withdrawalRequests, setWithdrawalRequests] = useState<WithdrawalRequest[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [currentUser] = useState('0x1234...5678'); // Mock current user
+  const [currentUser, setCurrentUser] = useState('0x1234...5678'); // Mock current user
 
   // Check for expired requests
   useEffect(() => {
@@ -269,6 +277,8 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       withdrawalRequests,
       transactions,
       currentUser,
+      availableAccounts,
+      setCurrentUser,
       createVault,
       deposit,
       requestWithdrawal,
