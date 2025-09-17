@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PlusCircle, Vault, TrendingUp } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useVault } from '@/context/VaultContext';
 import VaultCard from '@/components/VaultCard';
+import Hero from '@/components/Hero';
+import Footer from '@/components/Footer';
 
 const Dashboard = () => {
   const { vaults, withdrawalRequests } = useVault();
@@ -22,19 +25,33 @@ const Dashboard = () => {
   });
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div>
+      {/* Hero Section - Only show when there are no vaults or user is new */}
+      {vaults.length === 0 && <Hero />}
+      
+      <div className="container mx-auto px-4 py-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+      <motion.div
+        className="mb-8"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
           Vault Dashboard
         </h1>
         <p className="text-muted-foreground text-lg">
-          Manage your multi-signature savings vaults
+          Manage your multi-signature savings vaults with quantum security
         </p>
-      </div>
+      </motion.div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
         <div className="vault-card">
           <div className="flex items-center space-x-3 mb-3">
             <Vault className="h-8 w-8 text-primary" />
@@ -66,7 +83,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Filter Tabs */}
       <div className="flex space-x-2 mb-6">
@@ -126,6 +143,9 @@ const Dashboard = () => {
           </Link>
         </div>
       )}
+      </div>
+      
+      <Footer />
     </div>
   );
 };
